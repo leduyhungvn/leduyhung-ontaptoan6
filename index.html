@@ -326,27 +326,55 @@
             justify-content: center;
             text-align: center;
             border: 1px solid #eee;
+            transition: all 0.2s ease;
+        }
+        /* Màu sắc riêng cho từng ô thông tin */
+        .grid-item.time-start {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 4px solid #4caf50;
+        }
+        .grid-item.time-end {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+        }
+        .grid-item.wrong {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 4px solid #f44336;
+        }
+        .grid-item.unanswered {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
         }
         .grid-icon {
             width: 52px;
             height: 52px;
             margin-bottom: 10px;
-            color: #555;
         }
+        /* Màu icon riêng */
+        .time-start .grid-icon { color: #2e7d32; stroke: #2e7d32; }
+        .time-end .grid-icon { color: #1565c0; stroke: #1565c0; }
+        .wrong .grid-icon { color: #c62828; stroke: #c62828; }
+        .unanswered .grid-icon { color: #e65100; stroke: #e65100; }
         .grid-label {
             font-size: 18px;
-            color: #666;
+            font-weight: 600;
             margin-bottom: 5px;
         }
+        .time-start .grid-label { color: #2e7d32; }
+        .time-end .grid-label { color: #1565c0; }
+        .wrong .grid-label { color: #c62828; }
+        .unanswered .grid-label { color: #e65100; }
         .grid-value {
             font-size: 27px;
-            color: #333;
             font-weight: bold;
         }
+        .time-start .grid-value { color: #1b5e20; }
+        .time-end .grid-value { color: #0d47a1; }
+        .wrong .grid-value { color: #b71c1c; }
+        .unanswered .grid-value { color: #bf360c; }
         .review-list {
             margin-top: 20px;
             width: 100%;
-            /* Loại bỏ thanh cuộn: không có max-height và overflow-y */
         }
         .review-item {
             padding: 10px;
@@ -547,7 +575,6 @@
                 </div>
             </div>
         </div>
-        <!-- Danh sách câu đã làm (review-list) - không có thanh cuộn -->
         <div class="review-list" id="review-list"></div>
         <div style="text-align: center; margin-top: 20px;">
             <button id="retry-btn" class="btn btn-success">LÀM LẠI</button>
@@ -558,12 +585,11 @@
 <div id="notification" class="notification"></div>
 
 <script>
-    // ======================= KHO ĐỀ TOÁN 6 =======================
+    // ======================= KHO ĐỀ TOÁN 6 (DỮ LIỆU GIỮ NGUYÊN NỘI DUNG) =======================
     const questionBanks = {};
 
     // ---------------------- KHO T6HK2 (P3 đa dạng: số nguyên, thập phân 1,2,3 chữ số, âm dương) ----------------------
     questionBanks['T6HK2'] = {
-        // PHẦN 1: 20 câu trắc nghiệm (giữ nguyên)
         P1: [
             { "id": 1, "content": "Số đối của \\(-\\frac{5}{3}\\) là:", "correct": "\\(\\frac{5}{3}\\)", "wrong1": "\\(-\\frac{3}{5}\\)", "wrong2": "\\(-\\frac{5}{3}\\)", "wrong3": "\\(\\frac{3}{5}\\)" },
   { "id": 2, "content": "Số nào sau đây **không** viết được dưới dạng hỗn số?", "correct": "\\(-\\frac{3}{15}\\)", "wrong1": "\\(-\\frac{13}{5}\\)", "wrong2": "\\(\\frac{22}{7}\\)", "wrong3": "\\(\\frac{19}{2}\\)" },
@@ -866,10 +892,8 @@
   { "id": 299, "content": "Số đối của \\(-\\frac{2}{3}\\) là:", "correct": "\\(\\frac{2}{3}\\)", "wrong1": "\\(-\\frac{3}{2}\\)", "wrong2": "\\(\\frac{3}{2}\\)", "wrong3": "\\(-\\frac{2}{3}\\)" },
   { "id": 300, "content": "Kết quả của \\(1,25 \\times 0,8\\) là:", "correct": "1", "wrong1": "0,1", "wrong2": "10", "wrong3": "0,01" }
         ],
-
-        // PHẦN 2: 20 câu Đúng/Sai (giữ nguyên)
         P2: [
-              {"id":1,"content":"Số nghịch đảo của 1 là 1.","correct":"Đúng","wrong1":"Sai"},
+            {"id":1,"content":"Số nghịch đảo của 1 là 1.","correct":"Đúng","wrong1":"Sai"},
   {"id":2,"content":"Tích của hai số nguyên âm là số nguyên dương.","correct":"Đúng","wrong1":"Sai"},
   {"id":3,"content":"Phân số \\(\\frac{5}{10}\\) rút gọn được \\(\\frac{1}{2}\\).","correct":"Đúng","wrong1":"Sai"},
   {"id":4,"content":"Số đối của \\(\\frac{7}{12}\\) là \\(\\frac{12}{7}\\).","correct":"Sai","wrong1":"Đúng"},
@@ -1219,10 +1243,7 @@
   {"id":348,"content":"Phân số \\(\\frac{3}{4}\\) bằng 0,34.","correct":"Sai","wrong1":"Đúng"},
   {"id":349,"content":"20% của 50 là 20.","correct":"Sai","wrong1":"Đúng"},
   {"id":350,"content":"Số 0 không phải là số hữu tỉ.","correct":"Sai","wrong1":"Đúng"}
-
         ],
-
-        // PHẦN 3: 20 câu điền số (ĐA DẠNG: số nguyên dương, âm; thập phân 1,2,3 chữ số)
         P3: [
   { "id": 1, "content": "Kết quả của \\(\\frac{3}{4} + \\frac{1}{8}\\) (viết dưới dạng số thập phân, lấy 2 chữ số) là:", "correct": 0.88, "answerType": "float_pos", "decimals": 2 },
   { "id": 2, "content": "Số nghịch đảo của \\(\\frac{7}{2}\\) là (viết dưới dạng số thập phân, lấy 2 chữ số):", "correct": 0.29, "answerType": "float_pos", "decimals": 2 },
@@ -1527,7 +1548,7 @@
         ]
     };
 
-    // ---------------------- CÁC KHO KHÁC (giữ nguyên) ----------------------
+    // Các kho khác (giữ nguyên nội dung)
     questionBanks['T6GK1'] = {
         P1: Array.from({length:12}, (_,i) => ({ id:i+1, content:`Số tự nhiên $x$ thỏa mãn $x + ${i+3} = ${i+10}$ là:`, correct:`${7}`, wrong1:`${5}`, wrong2:`${8}`, wrong3:`${6}` })),
         P2: Array.from({length:10}, (_,i) => ({ id:i+1, content:`Tập hợp $\\mathbb{N}$ gồm các số tự nhiên.`, correct:i%2===0?"Đúng":"Sai", wrong1:i%2===0?"Sai":"Đúng" })),
@@ -1610,7 +1631,7 @@
         P3: [{ id:1, content:"Xác suất lấy được bi đỏ từ 3 đỏ,2 xanh là .../5", correct:3, answerType:"int", decimals:0 }].concat(Array.from({length:7}, (_,i) => ({ id:i+2, content:`Rút 1 thẻ từ 1..${i+7}, xác suất số chẵn là .../${i+7}`, correct:Math.floor((i+7)/2), answerType:"int", decimals:0 })))
     };
 
-    // ========== CÁC HÀM XỬ LÝ CHUNG ==========
+    // ========== CÁC HÀM XỬ LÝ CHUNG (giữ nguyên logic) ==========
     function convertQuestionToDisplayFormat(question, partType) {
         if (partType === 'P2') {
             return {
@@ -1637,7 +1658,7 @@
                 answerType,
                 decimals
             };
-        } else { // P1
+        } else {
             const labels = ['A','B','C','D'];
             let allChoices = [
                 { text: question.correct, isCorrect: true },
@@ -1697,7 +1718,7 @@
         return Math.abs(roundedUser - roundedCorrect) < 1e-9;
     }
 
-    // ========== QUẢN LÝ TRẠNG THÁI ==========
+    // ========== QUẢN LÝ TRẠNG THÁI (giữ nguyên) ==========
     let currentScreen = 'main-screen';
     let userAnswers = {};
     let testStartTime = null;
@@ -1913,7 +1934,6 @@
         cont.innerHTML = '';
         currentQuestions.forEach(q => {
             let ans = userAnswers[q.id];
-            // Chỉ hiển thị câu đã làm (có đáp án)
             if (!ans) return;
             let isCorrect = (q.type === 'input') ? compareNumericAnswer(ans, q.correctAnswer, q.decimals) : (ans === q.correctAnswer);
             let statusClass = isCorrect ? 'correct' : 'incorrect';
@@ -1934,7 +1954,6 @@
             let partLabel = q.partType;
             let div = document.createElement('div');
             div.className = `review-item ${statusClass}`;
-            // Hiển thị thêm originalId để dễ dàng tra cứu
             div.innerHTML = `
                 <div class="review-question-title"><span class="part-badge ${getPartBadgeClass(q.partType)}">${partLabel}</span> Câu ${q.displayOrder} (id gốc: ${q.originalId})</div>
                 <div class="question-content" style="font-size:16px;"><div class="math-container">${q.content}</div></div>
@@ -1960,7 +1979,7 @@
         document.getElementById('end-time-hms').textContent = formatTimeHMS(testSubmitTime);
         document.getElementById('incorrect-count').textContent = `${incorrect}/${currentQuestions.length}`;
         document.getElementById('unanswered-count').textContent = `${unanswered}/${currentQuestions.length}`;
-        renderReviewQuestions(); // Hiển thị danh sách câu đã làm (không cuộn)
+        renderReviewQuestions();
         showScreen('result-screen');
     }
 
